@@ -16,8 +16,17 @@ if ($Task -in 'All', 'Analyze') {
     if ($analysis.Count -gt 0) { $analysis | Format-List; throw 'ScriptAnalyzer reported errors or warnings.' }
 }
 if ($Task -in 'All', 'Test') {
-    Invoke-Pester (Join-Path $root 'tests') -CI
-    if ($LASTEXITCODE -ne 0) { throw 'Pester tests failed.' }
+        $isCI = [bool]$env:CI -or [bool]$env:TF_BUILD -or [bool]$env:GITHUB_ACTIONS
+        $result = Invoke-Pester (Join-Path $root 'tests') -PassThru
+        if ($result.FailedCount -gt 0) {
+            if ($isCI) { exit 1 }
+            throw "Pester: $($result.FailedCount) test(s) failed."
+        }
+        $ranNothing = @($result.Containers | Where-Object { $_.Tests.Count -eq 0 })
+        if ($ranNothing) {
+            if ($isCI) { exit 1 }
+            throw "Pester: container produced no tests: $($ranNothing.Name -join ', ')"
+        }
 }
 if ($Task -in 'All', 'Package') {
     Test-ModuleManifest $manifestPath | Out-Null

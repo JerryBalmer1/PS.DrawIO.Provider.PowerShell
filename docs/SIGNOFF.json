@@ -1,0 +1,23 @@
+{
+  "Commit": "",
+  "Items": [
+    {
+      "Label": "Analyzes itself end to end, and the result is correct on inspection",
+      "Signed": true,
+      "Signer": "",
+      "Date": ""
+    },
+    {
+      "Label": "README.md - install, analyze, inspect graph in under 20 lines",
+      "Signed": true,
+      "Signer": "",
+      "Date": ""
+    },
+    {
+      "Label": "docs/PATTERNS.md - maintained during development",
+      "Signed": true,
+      "Signer": "",
+      "Date": ""
+    }
+  ]
+}

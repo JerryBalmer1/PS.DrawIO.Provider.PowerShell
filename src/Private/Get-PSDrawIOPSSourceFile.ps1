@@ -1,4 +1,4 @@
-function Get-PSDrawIOSourceFile {
+function Get-PSDrawIOPSSourceFile {
     [CmdletBinding()]
     param([Parameter(Mandatory)][string]$Path)
 

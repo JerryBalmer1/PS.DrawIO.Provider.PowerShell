@@ -113,6 +113,8 @@ Engaged when: any change lands in `src/`.
 - Fixtures are **deliberately pathological** — alias-heavy, dynamically invoking, unparseable, lying manifests
 - The parse-never-import test uses a fixture whose top-level scope would write a file if executed. If that file appears, the test fails.
 - Never weaken an assertion for green. If a test is wrong, say so and explain why.
+- Never run `Invoke-Pester -CI` in an interactive or agent terminal; use `-PassThru` and inspect `FailedCount` and `Containers.Result` instead.
+- Code intended for a `.ps1` file must be written to the file, never pasted into an interactive shell. `$PSScriptRoot` is empty at the prompt and `BeforeAll` has no meaning outside a test file.
 
 ### 📦 Build Engineer
 Engaged when: touching `build/`, CI, or the manifest.
@@ -120,7 +122,7 @@ Engaged when: touching `build/`, CI, or the manifest.
 - Fixed order: **clean → analyze → test → package**
 - `PSScriptAnalyzer` clean at Error and Warning; suppressions carry inline justification
 - `Test-ModuleManifest` passes before packaging
-- CI matrix: Windows, Linux, macOS on PowerShell 7+
+- CI matrix: Windows and Linux on PowerShell 7+
 - Reproducible from a clean clone with no manual steps
 
 ### 📖 Technical Writer
@@ -268,7 +270,7 @@ Mirrors `PROVIDER.md` §9. If these diverge, `PROVIDER.md` wins and this file ge
 - [ ] A module with a malicious top-level side effect does **not** execute it
 
 ### Quality gates
-- [ ] Pester 5 green on Windows, Linux, macOS — PowerShell 7+
+- [ ] Pester 5 green on Windows and Linux — PowerShell 7+
 - [ ] Coverage ≥ 90% `src/Public`, ≥ 80% overall
 - [ ] `PSScriptAnalyzer` clean at Error and Warning
 - [ ] `Test-ModuleManifest` passes

@@ -1,4 +1,4 @@
-function Get-PSDrawIOAstExtent {
+function Get-PSDrawIOPSAstExtent {
     [CmdletBinding()]
     param([Parameter(Mandatory)][object]$Ast)
 
