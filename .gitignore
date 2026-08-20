@@ -1,2 +1,5 @@
 dist/
 testResults.xml
+coverage.xml
+*.coverage
+TestResults*.xml

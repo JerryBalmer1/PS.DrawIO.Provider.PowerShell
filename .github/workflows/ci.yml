@@ -1,0 +1,38 @@
+name: Provider PowerShell CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: PS.DrawIO.Provider.PowerShell
+        shell: pwsh
+    steps:
+      - name: Checkout provider
+        uses: actions/checkout@v4
+        with:
+          path: PS.DrawIO.Provider.PowerShell
+
+      - name: Checkout registry sibling
+        uses: actions/checkout@v4
+        with:
+          repository: JerryBalmer1/PS.DrawIO.Registry
+          path: PS.DrawIO.Registry
+
+      - name: Install Pester and PSScriptAnalyzer
+        run: |
+          Install-Module Pester -MinimumVersion 5.0.0 -Force -Scope CurrentUser -AllowClobber
+          Install-Module PSScriptAnalyzer -MinimumVersion 1.21.0 -Force -Scope CurrentUser -AllowClobber
+          Get-Module Pester, PSScriptAnalyzer -ListAvailable |
+            Select-Object Name, Version | Format-Table -AutoSize
+
+      - name: Build
+        run: ./build/build.ps1
