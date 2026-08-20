@@ -73,7 +73,35 @@ Describe 'Provider v1 acceptance' -Tag Acceptance {
     }
 
     It (Get-Label 'Nothing in `src/Declarations/`') -Tag Acceptance {
-        (Get-Content (Join-Path $script:providerRoot 'src/Declarations/PSDrawIO.Declarations.ps1') -Raw) | Should -Not -Match 'Get-PSDrawIOPS'
+        $analysisDir = Join-Path $script:providerRoot 'src/Analysis'
+        Test-Path -LiteralPath $analysisDir | Should -BeTrue -Because 'src/Analysis/ must exist for the Declaration/Analysis wall to be real'
+
+        $analysisFiles = @(Get-ChildItem -LiteralPath $analysisDir -Filter '*.ps1' -File -ErrorAction Stop)
+        $analysisFiles.Count | Should -BeGreaterThan 0 -Because 'src/Analysis/ must contain extraction functions'
+
+        $analysisNames = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+        foreach ($file in $analysisFiles) {
+            $parseErrors = $null
+            $ast = [System.Management.Automation.Language.Parser]::ParseFile($file.FullName, [ref]$null, [ref]$parseErrors)
+            foreach ($fn in $ast.FindAll({ param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $true)) {
+                [void]$analysisNames.Add($fn.Name)
+            }
+        }
+        $analysisNames.Count | Should -BeGreaterThan 0 -Because 'src/Analysis/ must define at least one function'
+
+        $declarationCalls = [System.Collections.Generic.List[string]]::new()
+        foreach ($file in Get-ChildItem -LiteralPath (Join-Path $script:providerRoot 'src/Declarations') -Filter '*.ps1' -File -Recurse) {
+            $parseErrors = $null
+            $ast = [System.Management.Automation.Language.Parser]::ParseFile($file.FullName, [ref]$null, [ref]$parseErrors)
+            foreach ($cmd in $ast.FindAll({ param($node) $node -is [System.Management.Automation.Language.CommandAst] }, $true)) {
+                $name = $cmd.GetCommandName()
+                if ($name -and $analysisNames.Contains($name)) {
+                    $declarationCalls.Add("$($file.Name):$name")
+                }
+            }
+        }
+
+        $declarationCalls | Should -BeNullOrEmpty -Because 'no file in src/Declarations/ may call a function defined in src/Analysis/'
     }
 
     It (Get-Label '`New-PSDrawIOPSAnalysis` builds') -Tag Acceptance {
