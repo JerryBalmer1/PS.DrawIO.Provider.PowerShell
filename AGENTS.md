@@ -245,6 +245,7 @@ Mirrors `PROVIDER.md` §9. If these diverge, `PROVIDER.md` wins and this file ge
 - [x] Registers against `PS.DrawIO.Registry` v1
 - [x] `Test-PSDrawIOProviderConformance` passes with zero failures
 - [x] Types declared: `PSFunction`, `PSClass`, `PSEnum`, `PSModule`; edges `Internal`, `External`, `Unresolved`, `Inherits`
+- [ ] Node types and edge types declared separately, not merged into one collection
 - [x] Public/private are **variants**, not separate types
 - [x] `vscode://` link template declared
 - [x] Layout hints only — zero geometry code
@@ -260,8 +261,16 @@ Mirrors `PROVIDER.md` §9. If these diverge, `PROVIDER.md` wins and this file ge
 - [x] Aliases resolved before classification
 - [x] `Unresolved` edges kept with source extent, never dropped
 - [x] Every graph carries `Analysis.Confidence`
+- [x] Benign dot-source loader boilerplate is not a confidence concern
 - [x] `Build-PSDrawIOPSGraph` produces a `PSModuleGraph`
-- [ ] Graph round-trips through JSON to an equivalent object
+- [x] Graph round-trips through JSON to an equivalent object
+
+### Graph schema
+- [x] Every edge endpoint resolves to a node `Id` in the graph
+- [x] External and unresolved references have placeholder nodes
+- [x] Duplicate edges aggregated with `CallCount` and `Extents`
+- [x] External references classified `BuiltIn` / `Module` / `Unknown`
+- [x] Node paths stored relative to `RootPath`
 
 ### Proof
 - [x] Analyzes **itself** end to end, correctly

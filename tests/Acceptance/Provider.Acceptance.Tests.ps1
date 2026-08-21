@@ -188,7 +188,28 @@ Describe 'Provider v1 acceptance' -Tag Acceptance {
 
     It (Get-Label 'Graph serializes') -Tag Acceptance {
         $graph = Build-PSDrawIOPSGraph -Session (New-PSDrawIOPSAnalysis -Path (Join-Path $script:providerRoot 'src'))
-        ($graph | ConvertTo-Json -Depth 20 | ConvertFrom-Json).Nodes.Count | Should -Be $graph.Nodes.Count
+        $roundTrip = $graph | ConvertTo-Json -Depth 20 | ConvertFrom-Json
+
+        @($roundTrip.Nodes).Count | Should -Be @($graph.Nodes).Count
+        @($roundTrip.Edges).Count | Should -Be @($graph.Edges).Count
+
+        $originalIds = @($graph.Nodes | ForEach-Object Id | Sort-Object)
+        $roundTripIds = @($roundTrip.Nodes | ForEach-Object Id | Sort-Object)
+        $roundTripIds | Should -Be $originalIds
+
+        $originalEndpoints = @($graph.Edges | ForEach-Object { '{0}->{1}' -f $_.From, $_.To } | Sort-Object)
+        $roundTripEndpoints = @($roundTrip.Edges | ForEach-Object { '{0}->{1}' -f $_.From, $_.To } | Sort-Object)
+        $roundTripEndpoints | Should -Be $originalEndpoints
+
+        $aggregated = @($graph.Edges | Where-Object { $_.CallCount -gt 1 } | Select-Object -First 1)
+        $aggregated | Should -Not -BeNullOrEmpty
+        $rtAgg = @($roundTrip.Edges | Where-Object { $_.From -eq $aggregated[0].From -and $_.To -eq $aggregated[0].To })
+        $rtAgg.Count | Should -Be 1
+        $rtAgg[0].CallCount | Should -Be $aggregated[0].CallCount
+        @($rtAgg[0].Extents).Count | Should -Be @($aggregated[0].Extents).Count
+
+        $roundTrip.Analysis.Confidence | Should -Not -BeNullOrEmpty
+        $roundTrip.RootPath | Should -Be $graph.RootPath
     }
 
     It (Get-Label 'Analyzes `PS.DrawIO.Registry`') -Tag Acceptance {

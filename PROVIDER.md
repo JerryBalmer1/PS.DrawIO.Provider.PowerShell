@@ -212,7 +212,7 @@ Two providers is the minimum to distinguish a real pattern from a PowerShell-sha
 - [x] Every graph carries an `Analysis.Confidence` block
 - [x] Benign dot-source loader boilerplate is not reported as a confidence concern
 - [x] `Build-PSDrawIOPSGraph` produces a `PSModuleGraph`
-- [ ] Graph serializes to JSON and round-trips back to an equivalent object
+- [x] Graph serializes to JSON and round-trips back to an equivalent object
 
 ### Graph schema
 - [x] Every edge endpoint resolves to a node `Id` present in the graph
