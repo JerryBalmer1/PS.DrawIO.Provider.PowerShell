@@ -17,22 +17,37 @@ jobs:
         shell: pwsh
     steps:
       - name: Checkout provider
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: PS.DrawIO.Provider.PowerShell
+          # Sign-off acceptance needs full history so cat-file/merge-base can
+          # resolve docs/SIGNOFF.json Commit (parent of countersign HEAD).
+          fetch-depth: 0
 
       - name: Checkout registry sibling
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: JerryBalmer1/PS.DrawIO.Registry
+          ref: v1.0.0
           path: PS.DrawIO.Registry
+          fetch-depth: 0
+
+      - name: Trust PSGallery
+        run: Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 
       - name: Install Pester and PSScriptAnalyzer
         run: |
-          Install-Module Pester -MinimumVersion 5.0.0 -Force -Scope CurrentUser -AllowClobber
+          # Pin to Pester 5.x: acceptance coverage still uses legacy
+          # Invoke-Pester -CodeCoverage (removed in Pester 6).
+          Install-Module Pester -MinimumVersion 5.0.0 -MaximumVersion 5.99.99 -Force -Scope CurrentUser -AllowClobber
           Install-Module PSScriptAnalyzer -MinimumVersion 1.21.0 -Force -Scope CurrentUser -AllowClobber
           Get-Module Pester, PSScriptAnalyzer -ListAvailable |
             Select-Object Name, Version | Format-Table -AutoSize
 
       - name: Build
-        run: ./build/build.ps1
+        run: |
+          ./build/build.ps1
+          # build.ps1 uses `exit 1` on CI test failure. Under GHA's pwsh shell
+          # (dot-sourced runner script + call-operator), nested exit sets
+          # $LASTEXITCODE but does not fail the process unless we re-exit.
+          if ($null -ne $LASTEXITCODE -and $LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
