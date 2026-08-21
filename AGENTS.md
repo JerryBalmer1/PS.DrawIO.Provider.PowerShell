@@ -241,50 +241,50 @@ Mirrors `PROVIDER.md` §9. If these diverge, `PROVIDER.md` wins and this file ge
 **v1 is done when every box is checked. Not before. Nothing outside this list is required.**
 
 ### Declaration half
-- [ ] Manifest declares `ContractVersion`, `ProviderName = 'PowerShell'`, `Capabilities`
-- [ ] Registers against `PS.DrawIO.Registry` v1
-- [ ] `Test-PSDrawIOProviderConformance` passes with zero failures
-- [ ] Types declared: `PSFunction`, `PSClass`, `PSEnum`, `PSModule`; edges `Internal`, `External`, `Unresolved`, `Inherits`
-- [ ] Public/private are **variants**, not separate types
-- [ ] `vscode://` link template declared
-- [ ] Layout hints only — zero geometry code
-- [ ] Declaration/Analysis wall enforced by a test
+- [x] Manifest declares `ContractVersion`, `ProviderName = 'PowerShell'`, `Capabilities`
+- [x] Registers against `PS.DrawIO.Registry` v1
+- [x] `Test-PSDrawIOProviderConformance` passes with zero failures
+- [x] Types declared: `PSFunction`, `PSClass`, `PSEnum`, `PSModule`; edges `Internal`, `External`, `Unresolved`, `Inherits`
+- [x] Public/private are **variants**, not separate types
+- [x] `vscode://` link template declared
+- [x] Layout hints only — zero geometry code
+- [x] Declaration/Analysis wall enforced by a test
 
 ### Extraction half
-- [ ] `New-PSDrawIOPSAnalysis` builds a session from a path
-- [ ] **No path calls `Import-Module` on a target** — enforced by a test
-- [ ] Functions: name, visibility, `CmdletBinding` + args, parameters, sets, help presence, AST extent
-- [ ] Classes: name, base type, properties, methods, inheritance edges
-- [ ] Enums: name, underlying type, members
-- [ ] Dependencies classified `Internal` / `External` / `Unresolved`
-- [ ] Aliases resolved before classification
-- [ ] `Unresolved` edges kept with source extent, never dropped
-- [ ] Every graph carries `Analysis.Confidence`
-- [ ] `Build-PSDrawIOPSGraph` produces a `PSModuleGraph`
+- [x] `New-PSDrawIOPSAnalysis` builds a session from a path
+- [x] **No path calls `Import-Module` on a target** — enforced by a test
+- [x] Functions: name, visibility, `CmdletBinding` + args, parameters, sets, help presence, AST extent
+- [x] Classes: name, base type, properties, methods, inheritance edges
+- [x] Enums: name, underlying type, members
+- [x] Dependencies classified `Internal` / `External` / `Unresolved`
+- [x] Aliases resolved before classification
+- [x] `Unresolved` edges kept with source extent, never dropped
+- [x] Every graph carries `Analysis.Confidence`
+- [x] `Build-PSDrawIOPSGraph` produces a `PSModuleGraph`
 - [ ] Graph round-trips through JSON to an equivalent object
 
 ### Proof
-- [ ] Analyzes **itself** end to end, correctly
-- [ ] Analyzes `PS.DrawIO.Registry` end to end
-- [ ] Fixture with aliases, dynamic invocation, and a parse error — all three surface in confidence output
-- [ ] A module with a malicious top-level side effect does **not** execute it
+- [x] Analyzes **itself** end to end, correctly
+- [x] Analyzes `PS.DrawIO.Registry` end to end
+- [x] Fixture with aliases, dynamic invocation, and a parse error — all three surface in confidence output
+- [x] A module with a malicious top-level side effect does **not** execute it
 
 ### Quality gates
-- [ ] Pester 5 green on Windows and Linux — PowerShell 7+
-- [ ] Coverage ≥ 90% `src/Analysis`, ≥ 80% overall
-- [ ] `PSScriptAnalyzer` clean at Error and Warning
-- [ ] `Test-ModuleManifest` passes
-- [ ] Imports clean in a fresh session
-- [ ] 200-function module analyzed in under 30 seconds
-- [ ] No `src/Public` function exceeds 100 lines
-- [ ] Approved verbs throughout
+- [x] Pester 5 green on Windows and Linux — PowerShell 7+
+- [x] Coverage ≥ 90% `src/Analysis`, ≥ 80% overall
+- [x] `PSScriptAnalyzer` clean at Error and Warning
+- [x] `Test-ModuleManifest` passes
+- [x] Imports clean in a fresh session
+- [x] 200-function module analyzed in under 30 seconds
+- [x] No `src/Public` function exceeds 100 lines
+- [x] Approved verbs throughout
 
 ### Documentation
-- [ ] `README.md` — install → analyze → inspect in under 20 lines
-- [ ] `docs/DOMAIN-MODEL.md`
-- [ ] `docs/PATTERNS.md` — maintained during development
-- [ ] `docs/LIMITATIONS.md`
-- [ ] `CHANGELOG.md` per Keep a Changelog
+- [x] `README.md` — install → analyze → inspect in under 20 lines
+- [x] `docs/DOMAIN-MODEL.md`
+- [x] `docs/PATTERNS.md` — maintained during development
+- [x] `docs/LIMITATIONS.md`
+- [x] `CHANGELOG.md` per Keep a Changelog
 
 ### Explicitly NOT v1 — do not build these
 - ✗ `.drawio` output of any kind

@@ -190,59 +190,59 @@ Two providers is the minimum to distinguish a real pattern from a PowerShell-sha
 > **This section drives the acceptance suite.** Every checkbox needs a matching `It` block in `tests/Acceptance/`. The meta-test enforces it. If an item is unchecked, v1 is not done. If it is not listed, it is not required for v1.
 
 ### Declaration half
-- [ ] Provider manifest declares `ContractVersion`, `ProviderName = 'PowerShell'`, and `Capabilities`
-- [ ] Registers successfully against `PS.DrawIO.Registry` v1
-- [ ] Passes `Test-PSDrawIOProviderConformance` with zero failures
-- [ ] Semantic types declared: `PSFunction`, `PSClass`, `PSEnum`, `PSModule`, plus edge types `Internal`, `External`, `Unresolved`, `Inherits`
+- [x] Provider manifest declares `ContractVersion`, `ProviderName = 'PowerShell'`, and `Capabilities`
+- [x] Registers successfully against `PS.DrawIO.Registry` v1
+- [x] Passes `Test-PSDrawIOProviderConformance` with zero failures
+- [x] Semantic types declared: `PSFunction`, `PSClass`, `PSEnum`, `PSModule`, plus edge types `Internal`, `External`, `Unresolved`, `Inherits`
 - [ ] Node types and edge types are declared separately, not merged into one collection
-- [ ] Public/private expressed as **variants**, not separate types
-- [ ] Link template declared for `vscode://` source navigation
-- [ ] Layout **hints** only — zero geometry code in this repository
-- [ ] Nothing in `src/Declarations/` calls anything in `src/Analysis/` — enforced by a test
+- [x] Public/private expressed as **variants**, not separate types
+- [x] Link template declared for `vscode://` source navigation
+- [x] Layout **hints** only — zero geometry code in this repository
+- [x] Nothing in `src/Declarations/` calls anything in `src/Analysis/` — enforced by a test
 
 ### Extraction half
-- [ ] `New-PSDrawIOPSAnalysis` builds a session from a path
-- [ ] **No code path calls `Import-Module` on an analysis target** — enforced by an AST-based test
-- [ ] Functions extracted: name, visibility, `CmdletBinding` + args, parameters, parameter sets, help presence, AST extent
-- [ ] Classes extracted: name, base type, properties, methods, inheritance edges
-- [ ] Enums extracted: name, underlying type, members
-- [ ] Dependencies classified as `Internal` / `External` / `Unresolved`
-- [ ] Aliases resolved before classification
-- [ ] `Unresolved` edges retained with source extent, never silently dropped
-- [ ] Every graph carries an `Analysis.Confidence` block
-- [ ] Benign dot-source loader boilerplate is not reported as a confidence concern
-- [ ] `Build-PSDrawIOPSGraph` produces a `PSModuleGraph`
+- [x] `New-PSDrawIOPSAnalysis` builds a session from a path
+- [x] **No code path calls `Import-Module` on an analysis target** — enforced by an AST-based test
+- [x] Functions extracted: name, visibility, `CmdletBinding` + args, parameters, parameter sets, help presence, AST extent
+- [x] Classes extracted: name, base type, properties, methods, inheritance edges
+- [x] Enums extracted: name, underlying type, members
+- [x] Dependencies classified as `Internal` / `External` / `Unresolved`
+- [x] Aliases resolved before classification
+- [x] `Unresolved` edges retained with source extent, never silently dropped
+- [x] Every graph carries an `Analysis.Confidence` block
+- [x] Benign dot-source loader boilerplate is not reported as a confidence concern
+- [x] `Build-PSDrawIOPSGraph` produces a `PSModuleGraph`
 - [ ] Graph serializes to JSON and round-trips back to an equivalent object
 
 ### Graph schema
-- [ ] Every edge endpoint resolves to a node `Id` present in the graph
-- [ ] External and unresolved references have placeholder nodes
-- [ ] Duplicate edges aggregated with `CallCount` and `Extents`
-- [ ] External references classified as `BuiltIn` / `Module` / `Unknown`
-- [ ] Node paths stored relative to `RootPath`
+- [x] Every edge endpoint resolves to a node `Id` present in the graph
+- [x] External and unresolved references have placeholder nodes
+- [x] Duplicate edges aggregated with `CallCount` and `Extents`
+- [x] External references classified as `BuiltIn` / `Module` / `Unknown`
+- [x] Node paths stored relative to `RootPath`
 
 ### Proof
-- [ ] Analyzes **itself** end to end, and the result is correct on inspection
-- [ ] Analyzes `PS.DrawIO.Registry` end to end
-- [ ] Analyzes a fixture module containing deliberate alias use, dynamic invocation, and a parse error — all three appear correctly in confidence output
-- [ ] Analyzing a module with a **known malicious side effect in its top-level scope** does not execute it
+- [x] Analyzes **itself** end to end, and the result is correct on inspection
+- [x] Analyzes `PS.DrawIO.Registry` end to end
+- [x] Analyzes a fixture module containing deliberate alias use, dynamic invocation, and a parse error — all three appear correctly in confidence output
+- [x] Analyzing a module with a **known malicious side effect in its top-level scope** does not execute it
 
 ### Quality gates
-- [ ] Pester 5 green on Windows and Linux — PowerShell 7+
-- [ ] Coverage ≥ 90% on `src/Analysis`, ≥ 80% overall
-- [ ] `PSScriptAnalyzer` clean at Error and Warning; suppressions justified inline
-- [ ] `Test-ModuleManifest` passes
-- [ ] Imports clean in a fresh session
-- [ ] Analysis of a 200-function module with realistic call density completes in under 30 seconds, measured
-- [ ] No `src/Public` function exceeds 100 lines
-- [ ] All exported names use approved verbs
+- [x] Pester 5 green on Windows and Linux — PowerShell 7+
+- [x] Coverage ≥ 90% on `src/Analysis`, ≥ 80% overall
+- [x] `PSScriptAnalyzer` clean at Error and Warning; suppressions justified inline
+- [x] `Test-ModuleManifest` passes
+- [x] Imports clean in a fresh session
+- [x] Analysis of a 200-function module with realistic call density completes in under 30 seconds, measured
+- [x] No `src/Public` function exceeds 100 lines
+- [x] All exported names use approved verbs
 
 ### Documentation
-- [ ] `README.md` — install → analyze → inspect graph in under 20 lines
-- [ ] `docs/DOMAIN-MODEL.md` — the `PSModuleGraph` schema
-- [ ] `docs/PATTERNS.md` — **maintained during development**, feeds the registry scaffolder
-- [ ] `docs/LIMITATIONS.md` — what static analysis cannot see, stated plainly
-- [ ] `CHANGELOG.md` per Keep a Changelog
+- [x] `README.md` — install → analyze → inspect graph in under 20 lines
+- [x] `docs/DOMAIN-MODEL.md` — the `PSModuleGraph` schema
+- [x] `docs/PATTERNS.md` — **maintained during development**, feeds the registry scaffolder
+- [x] `docs/LIMITATIONS.md` — what static analysis cannot see, stated plainly
+- [x] `CHANGELOG.md` per Keep a Changelog
 
 ### Explicitly NOT in v1
 - ✗ `.drawio` file output of any kind
