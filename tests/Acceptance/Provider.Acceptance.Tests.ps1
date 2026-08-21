@@ -21,10 +21,32 @@ BeforeAll {
     $executed = Join-Path $script:providerRoot 'tests/Fixtures/Malicious/executed.txt'
     if (Test-Path $executed) { Remove-Item $executed -Force }
     function Assert-ManualSignOff {
+        # Sign-off cannot equal HEAD after the file is committed (hash moves).
+        # Ancestry + committed drift: Commit must be a real commit; git diff
+        # Commit HEAD may list only docs/SIGNOFF.json.
+        # Working-tree drift is deliberately not checked — a sign-off records a
+        # commit, not a working copy. CI has a clean tree; local dirt is transient.
         $signoffPath = Join-Path $script:providerRoot 'docs/SIGNOFF.json'
-        $signoff = Get-Content $signoffPath -Raw | ConvertFrom-Json
-        $signoff.Commit | Should -Be (git -C $script:providerRoot rev-parse HEAD)
-        $signoff.Items.Count | Should -Be 3
+        $signoff = Get-Content -LiteralPath $signoffPath -Raw | ConvertFrom-Json
+        $signoff.Commit | Should -Not -BeNullOrEmpty
+        $commitType = git -C $script:providerRoot cat-file -t $signoff.Commit 2>$null
+        $commitType | Should -Be 'commit'
+        git -C $script:providerRoot merge-base --is-ancestor $signoff.Commit HEAD
+        $LASTEXITCODE | Should -Be 0 -Because "sign-off Commit must be an ancestor of HEAD"
+
+        # Working-tree drift is deliberately not checked (sign-off = commit, not WT).
+        $committedDrift = @(
+            git -C $script:providerRoot diff --name-only $signoff.Commit HEAD |
+                Where-Object { $_ -and ($_ -ne 'docs/SIGNOFF.json') }
+        )
+        $committedDrift | Should -BeNullOrEmpty -Because "signed commit $($signoff.Commit) must match HEAD except docs/SIGNOFF.json; drifted: $($committedDrift -join ', ')"
+
+        $signoff.Items | Should -Not -BeNullOrEmpty
+        foreach ($item in @($signoff.Items)) {
+            $item.Signed | Should -BeTrue -Because "sign-off item '$($item.Label)' must be Signed"
+            $item.Signer | Should -Not -BeNullOrEmpty -Because "sign-off item '$($item.Label)' must name a Signer"
+            $item.Date | Should -Not -BeNullOrEmpty -Because "sign-off item '$($item.Label)' must have a Date"
+        }
     }
 }
 
