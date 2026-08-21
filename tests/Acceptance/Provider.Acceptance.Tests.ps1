@@ -223,9 +223,9 @@ Describe 'Provider v1 acceptance' -Tag Acceptance {
     }
 
     It (Get-Label 'Coverage ≥ 90%') -Tag Acceptance {
-        $publicCoverage = Invoke-Pester (Join-Path $script:providerRoot 'tests/Unit') -CodeCoverage (Join-Path $script:providerRoot 'src/Public/*.ps1') -PassThru
+        $analysisCoverage = Invoke-Pester (Join-Path $script:providerRoot 'tests/Unit') -CodeCoverage (Join-Path $script:providerRoot 'src/Analysis/*.ps1') -PassThru
         $overallCoverage = Invoke-Pester (Join-Path $script:providerRoot 'tests/Unit') -CodeCoverage (Join-Path $script:providerRoot 'src/**/*.ps1') -PassThru
-        $publicCoverage.CodeCoverage.CoveragePercent | Should -BeGreaterOrEqual 90
+        $analysisCoverage.CodeCoverage.CoveragePercent | Should -BeGreaterOrEqual 90
         $overallCoverage.CodeCoverage.CoveragePercent | Should -BeGreaterOrEqual 80
     }
 

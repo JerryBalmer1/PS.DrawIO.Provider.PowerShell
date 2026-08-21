@@ -229,7 +229,7 @@ Two providers is the minimum to distinguish a real pattern from a PowerShell-sha
 
 ### Quality gates
 - [ ] Pester 5 green on Windows and Linux — PowerShell 7+
-- [ ] Coverage ≥ 90% on `src/Public`, ≥ 80% overall
+- [ ] Coverage ≥ 90% on `src/Analysis`, ≥ 80% overall
 - [ ] `PSScriptAnalyzer` clean at Error and Warning; suppressions justified inline
 - [ ] `Test-ModuleManifest` passes
 - [ ] Imports clean in a fresh session
