@@ -180,7 +180,8 @@ Engaged when: docs change, or public behavior changes.
 ## 4. Commands
 
 ```powershell
-./build/build.ps1                          # clean → analyze → test → package
+./build/build.ps1                          # clean → analyze → test; does not package (deliberate node/edge fail) — docs/DECISIONS/0004-deliberate-failure-blocks-packaging.md
+./build/build.ps1 -Task Package            # produce dist/ artifact
 ./build/build.ps1 -Task Test
 Invoke-Pester ./tests -Output Detailed
 Invoke-Pester ./tests -CI

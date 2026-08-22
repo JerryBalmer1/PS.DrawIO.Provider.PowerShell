@@ -305,3 +305,5 @@ Learned the hard way; both are in `AGENTS.md` and repeated here because violatin
 **Pester 5 discovery and run are separate scopes.** File-scope variables read inside `BeforeAll`/`It` need the `$script:` prefix or they arrive null.
 
 **The build must detect both failure modes.** Assertion failures and containers that produced no tests are different problems. `$LASTEXITCODE` reflects neither — it is set by native executables, not cmdlets.
+
+**Default `./build/build.ps1` does not package.** Test throws on the deliberate node/edge acceptance failure before Package runs. Use `./build/build.ps1 -Task Package` for the artifact. See `docs/DECISIONS/0004-deliberate-failure-blocks-packaging.md`.
